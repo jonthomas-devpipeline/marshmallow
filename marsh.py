@@ -2,7 +2,7 @@ from flask import request, Flask, jsonify
 from flask_marshmallow import Marshmallow
 from sqlalchemy.dialects.postgresql import UUID
 
-from models.app_users import AppUsers, users_schema, user_schema
+from models.appusers import AppUsers, users_schema, user_schema
 from models.organizations import Organizations, organization_schema, organizations_Schema
 
 from db import * # or db, init_db
@@ -13,18 +13,18 @@ app = Flask(__name__)
 database_host_url = os.environ.get('DATABASE_URL')
 database_host_uri = database_host_url.replace('postgres', 'postgresql')
 
-app.config('SQLALCHEMY_DATABASE_URI') = database_host_uri
+app.config('SQLALCHEMY_DATABASE_URI') == database_host_uri
 
-app.config('SQLALCHEMY_TRACK_MODIFICATIONS') = False
+app.config('SQLALCHEMY_TRACK_MODIFICATIONS') == False
 
 init_db(app, db)
 ma = Marshmallow(app)
 
 def create_all():
   with app.pp_context():
-  print("Creating tables...")
-  db.create_all()
-  print("All done!")
+    print("Creating tables...")
+    db.create_all()
+    print("All done!")
 
   print("Querying for DevPipeline organization...")
   org_data = db.session.query(Organizations).filter(Organizations.name == "DevPipeline").first()
@@ -57,7 +57,7 @@ def create_all():
 
 
 
-@app.route('/organzation/add', methods=(['POST'])
+@app.route('/organzation/add', methods=['POST'])
 def add_org():
   form = request.form
 
@@ -84,110 +84,110 @@ def add_org():
 
   return jsonify('Org Added'), 200
 
-@app.route('/orgnization/list'), methods=(['GET'])
+@app.route('/orgnization/list', methods=['GET'])
 def get_all_organizations():
   org_records = db.session.query(Organizations).all()
 
   return jsonify(organizations_schema.dump(org_records)), 200
-...
-124 @app.route('/user/activate/<user_id>'), methods=(['PUT'])
-125 def activate_user(user_id):
-126   user_record = db.session.query(AppUsers).filter(AppUsers.user_id == user_id).first()
-127   if not user_record:
-128     return ('User not found'), 404
-129
-130   user_record.active = True
-131   db.session.commit()
-132
-133   return jsonify("User Activated"), 201
-134
-135 @app.route('/user/list', methods=(['GET'])
-136 def get_all_users():
-137   user_records = db.session.query(AppUsers).all()
-138   
-139   return jsonfiy(users_schema.dump(user_records)), 200
-140
-141 @app.route('/user/<user_id>', methods = (['GET']))
-142 def get_user_by_id(user_id):
-143   user_record = db.session.query(AppUsers).filter(AppUsers.user_id==user_id).first()
-144
-145   return jsonify(user_schema.dump(user_record)), 200
-...
-165 def edit_user(user_id, first_name = None, last_name = None, email = None, password = None, city = None, state = None, active = None)
-166   if user_record = db.session.query(AppUsers).filter(AppUsers.user_id == user_id).first()
-167   
-168   if not user_record:
-169     return('User not found'), 404
-170   if request:
-171     form = request.format
-172     first_name = form.get('first_name')
-173     last_name = form.get('last_name')
-174     email = form.get('email')
-175     password = form.get('password')
-176     city = form.get('city')
-177     state = form.get('state')
-178     role = form.get('role')
-179     active = form.get('active')
-180
-181   if first_name:
-182     user_record.first_name = first_name
-183   if last_name:
-184     user_record.last_name = last_name
-185   if email:
-186     user_record.last_name = email
-187   if password:
-188     user_record.last_name = password
-189   if city:
-190     user_record.last_name = city
-191   if state:
-192     user_record.last_name = state
-193   if role:
-194     user_record.last_name = role
-195   if active:
-196     user_record.last_name = active
-197   
-198   db.session.commit()
-199
-200   return jsonify('User Updated'), 201
-201
-202   if __name__ = '__main__':
-203     create_all()
-204     app.run()
-...
-224   @app.route('/org/get', methods=[('GET')])
-225   def get_all_active_orgs():
-226     results = db.session.query(Organizations).filter(Organizatons.active == True).all()
-227     if results:
-228         return jsonify(organizations_schema.dump(results)), 200
-229
-230       else:
-231         return jsonify('No Organization Found'), 404
-232
-...
-258   @app.route('/org/update/<org_id>', methods=['POST', 'PUT'] )
-259     def org_update(org_id):
-260       organization = db.session.query(Organizations).filter(Organizations.org_id==org_id).first()
-261
-262       if not organization:
-263         return jsonify(f"Org with id {org_id} not found"), 404
-264
-265       post_data = request.json
-266       if not post_data:
-267         post_data = request.form
-268
-269       if post_data.get('name'):
-270         organization.name = post_data.get('name')
-271       if post_data.get('phone'):
-272         organization.phone = post_data.get('phone')
-273       if post_data.get('city'):
-274         organization.city = post_data.get('city')
-275       if post_data.get('state'):
-276         organization.state = post_data.get('state')
-277       if 'active' in post_data:
-278         organization.active = post_data.get('active')
-279
-280       db.sessions.commit()
-281
-282       return jsonify(organization_schema.dump(organization)), 200
+
+@app.route('/user/activate/<user_id>', methods=['PUT'])
+def activate_user(user_id):
+  user_record = db.session.query(AppUsers).filter(AppUsers.user_id == user_id).first()
+  if not user_record:
+    return ('User not found'), 404
+
+  user_record.active = True
+  db.session.commit()
+
+  return jsonify("User Activated"), 201
+
+@app.route('/user/list', methods=['GET'])
+def get_all_users():
+  user_records = db.session.query(AppUsers).all()
+   
+  return jsonfiy(users_schema.dump(user_records)), 200
+
+@app.route('/user/<user_id>', methods = (['GET']))
+def get_user_by_id(user_id):
+  user_record = db.session.query(AppUsers).filter(AppUsers.user_id==user_id).first()
+
+  return jsonify(user_schema.dump(user_record)), 200
+
+def edit_user(user_id, first_name = None, last_name = None, email = None, password = None, city = None, state = None, active = None):
+  user_record = db.session.query(AppUsers).filter(AppUsers.user_id == user_id).first()
+   
+  if not user_record:
+    return('User not found'), 404
+  if request:
+    form = request.format
+    first_name = form.get('first_name')
+    last_name = form.get('last_name')
+    email = form.get('email')
+    password = form.get('password')
+    city = form.get('city')
+    state = form.get('state')
+    role = form.get('role')
+    active = form.get('active')
+
+  if first_name:
+    user_record.first_name = first_name
+  if last_name:
+    user_record.last_name = last_name
+  if email:
+    user_record.last_name = email
+  if password:
+    user_record.last_name = password
+  if city:
+    user_record.last_name = city
+  if state:
+    user_record.last_name = state
+  if role:
+    user_record.last_name = role
+  if active:
+    user_record.last_name = active
+  
+  db.session.commit()
+
+  return jsonify('User Updated'), 201
+
+  if __name__ == '__main__':
+    create_all()
+    app.run()
+
+@app.route('/org/get', methods=[('GET')])
+def get_all_active_orgs():
+  results = db.session.query(Organizations).filter(Organizatons.active == True).all()
+  if results:
+    return jsonify(organizations_schema.dump(results)), 200
+
+  else:
+    return jsonify('No Organization Found'), 404
+
+
+@app.route('/org/update/<org_id>', methods=['POST', 'PUT'] )
+def org_update(org_id):
+  organization = db.session.query(Organizations).filter(Organizations.org_id==org_id).first()
+
+  if not organization:
+    return jsonify(f"Org with id {org_id} not found"), 404
+
+  post_data = request.json
+  if not post_data:
+    post_data = request.form
+
+  if post_data.get('name'):
+    organization.name = post_data.get('name')
+  if post_data.get('phone'):
+    organization.phone = post_data.get('phone')
+  if post_data.get('city'):
+    organization.city = post_data.get('city')
+  if post_data.get('state'):
+    organization.state = post_data.get('state')
+  if 'active' in post_data:
+    organization.active = post_data.get('active')
+
+  db.sessions.commit()
+
+  return jsonify(organization_schema.dump(organization)), 200
 
 users = d.relationship('Users', backref='Organization', lazy=True)
